@@ -4,11 +4,14 @@ var isTryingToAnimate = false;
 
 var slider = document.getElementById("particleslider");
 var nbParticles = document.getElementById("numberparticles");
-slider.oninput = function() {
+function sliderlistener() {
    nbParticles.innerText = slider.value;
    enforceParticleNumber = slider.value;
+   console.log(enforceParticleNumber);
    tryToAnimate();
-};
+}
+slider.oninput = sliderlistener;
+slider.onchange = sliderlistener;
 var enforceParticleNumber = 0;
 
 function reinit() {
@@ -68,4 +71,3 @@ function animate() {
 
 window.addEventListener('DOMContentLoaded', reinit);
 window.addEventListener('resize', reinit);
-

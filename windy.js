@@ -1,5 +1,9 @@
 
-// TODO [REFACTOR] Make this a clean module.
+// Math.sign polyfill
+if (!Math.sign) {
+    Math.sign = function(x) { return x ? x < 0 ? -1 : 1 : 0 };
+}
+
 var PARTICLE_LINE_WIDTH = 1;
 var MAX_PARTICLE_AGE = 100;
 var FADE_FILL_STYLE = 'rgba(0, 0, 0, 0.97)';
@@ -98,10 +102,11 @@ var Windy =
 
         makeBuckets: function() {
             // 1 bucket per color, NUMBER_BUCKETS colors.
-            buckets = Array.from(Array(NUMBER_BUCKETS).keys()).map(function(){return []});
+            buckets = // Array.from(Array(NUMBER_BUCKETS).keys()).map(function(){return []});
+                Array.apply(null, new Array(NUMBER_BUCKETS)).map(function(){return []});
         },
 
-        addParticleToDrawBucket: function(particle, vector) {0.08
+        addParticleToDrawBucket: function(particle, vector) {
             var maxVectorNorm = maxVectorFieldNorm;
             var thisVectorNorm = this.computeNorm(vector);
             var nbBuckets = buckets.length;
@@ -348,7 +353,7 @@ var Windy =
         },
 
         // Enhancement: try out twojs
-        // (Not fan of the loading overhead)
+        // (Not a fan of the loading overhead)
         draw: function() {
             g.lineWidth = PARTICLE_LINE_WIDTH;
             g.fillStyle = FADE_FILL_STYLE;
@@ -391,8 +396,6 @@ var Windy =
 
         getEventPositionInCanvas: function(event) {
             // YES, this is quick and dirty, please <i>please</i> be indulgent.
-            // jQuery would have been a loading overhead
-            // (Hyphenator is an overhead as well, but it is mandatory for Fr support).
             var windyElement = document.getElementById('windy');
             var rect = windyElement.getBoundingClientRect();
             var top = rect.top;
@@ -415,7 +418,6 @@ var Windy =
             var sy = positionInCanvas[1];
 
             // Kind of a polyfill for detecting a right-click,
-            // No jQuery should be involved.
             var rightclick =
                 event.which ? (event.which === 3) :
                     event.button ? event.button === 2 : false;
