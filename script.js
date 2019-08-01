@@ -1,9 +1,19 @@
 var timeout;
-var timeoutLimit = 100;
+var timeoutLimit = 300;
+var isTryingToAnimate = false;
+
+var slider = document.getElementById("particleslider");
+var nbParticles = document.getElementById("numberparticles");
+slider.oninput = function() {
+   nbParticles.innerText = slider.value;
+};
 
 function tryToAnimate() {
    clearTimeout(animate);
-   timeout = setTimeout(animate, timeoutLimit);
+   if (!isTryingToAnimate) {
+      isTryingToAnimate = true;
+      timeout = setTimeout(animate, timeoutLimit);
+   }
 }
 
 function getHeight(element) {
@@ -14,6 +24,8 @@ function getHeight(element) {
 }
 
 function animate() {
+   isTryingToAnimate = false;
+
    // Warning! This is quick and dirty, be indulgent.
    var element = document.getElementById('windy');
    var hr = document.getElementById('separator');
@@ -29,6 +41,8 @@ function animate() {
 
    var nbSamples =
       Math.floor(Math.min(25 * width * height / 2000, 30000));
+   slider.value = nbSamples;
+   nbParticles.innerText = nbSamples.toString();
 
    console.log('[script.js] Particle tracing started using ' +
    nbSamples + ' samples.');
@@ -40,4 +54,6 @@ function animate() {
    );
 }
 
-window.addEventListener('DOMContentLoaded', tryToAnimate, false);
+window.addEventListener('DOMContentLoaded', tryToAnimate);
+window.addEventListener('resize', tryToAnimate);
+
