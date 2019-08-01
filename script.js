@@ -7,7 +7,6 @@ var nbParticles = document.getElementById("numberparticles");
 function sliderlistener() {
    nbParticles.innerText = slider.value;
    enforceParticleNumber = slider.value;
-   console.log(enforceParticleNumber);
    tryToAnimate();
 }
 slider.oninput = sliderlistener;
