@@ -6,7 +6,15 @@ var slider = document.getElementById("particleslider");
 var nbParticles = document.getElementById("numberparticles");
 slider.oninput = function() {
    nbParticles.innerText = slider.value;
+   enforceParticleNumber = slider.value;
+   tryToAnimate();
 };
+var enforceParticleNumber = 0;
+
+function reinit() {
+   enforceParticleNumber = 0;
+   tryToAnimate();
+}
 
 function tryToAnimate() {
    clearTimeout(animate);
@@ -30,7 +38,8 @@ function animate() {
    var element = document.getElementById('windy');
    var hr = document.getElementById('separator');
    var foot = document.getElementById('footer');
-   var navHeight = getHeight(hr) + getHeight(foot);
+   var userinput = document.getElementById('userinput');
+   var navHeight = getHeight(hr) + getHeight(foot) + getHeight(userinput);
 
    var winHeight = window.innerHeight;
 
@@ -41,6 +50,9 @@ function animate() {
 
    var nbSamples =
       Math.floor(Math.min(25 * width * height / 2000, 30000));
+
+   if (enforceParticleNumber > 0) nbSamples = enforceParticleNumber;
+
    slider.value = nbSamples;
    nbParticles.innerText = nbSamples.toString();
 
@@ -54,6 +66,6 @@ function animate() {
    );
 }
 
-window.addEventListener('DOMContentLoaded', tryToAnimate);
-window.addEventListener('resize', tryToAnimate);
+window.addEventListener('DOMContentLoaded', reinit);
+window.addEventListener('resize', reinit);
 
